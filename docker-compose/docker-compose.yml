@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   web:
-    image: panoslin/nsfw:latest
+    image: python:3.8
     deploy:  # This only takes effect when deploying to a swarm with docker stack deploy, and is ignored by docker-compose up and docker-compose run.
       replicas: 4  # Run 4 instances of that image as a service called web
       resources:
@@ -11,8 +11,8 @@ services:
       restart_policy:
         condition: any # Immediately restart containers if one fails.
     ports:
-      - 6739:6739
+      - 9974:9974
     volumes:
       - ../:/filter-nsfw-python3
 #      - /root/CrawlerBackend/download/avatar:/root/CrawlerBackend/download/avatar
-    command: gunicorn -c gunicorn/gunicorn_conf.py  api:app
+    command: gunicorn -c gunicorn/gunicorn_conf.py api:app

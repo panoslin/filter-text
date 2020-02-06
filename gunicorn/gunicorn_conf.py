@@ -8,7 +8,7 @@ gunicorn -c gunicorn/gunicorn_conf.py  api:app
 """
 import os
 
-bind = '0.0.0.0:6739'
+bind = '0.0.0.0:9974'
 ## Gunicorn should only need 4-12 worker processes
 ## to handle hundreds or thousands of requests per second.
 workers = min(os.cpu_count(), 5)
