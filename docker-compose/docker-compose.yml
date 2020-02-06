@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  web:
+    image: panoslin/nsfw:latest
+    deploy:  # This only takes effect when deploying to a swarm with docker stack deploy, and is ignored by docker-compose up and docker-compose run.
+      replicas: 4  # Run 4 instances of that image as a service called web
+      resources:
+        limits:
+          cpus: "1"  # limiting each one to use, at most, 10 core of CPU
+          memory: 1000M  # limiting each one to use, at most, 4096M of RAM
+      restart_policy:
+        condition: any # Immediately restart containers if one fails.
+    ports:
+      - 6739:6739
+    volumes:
+      - ../:/filter-nsfw-python3
+#      - /root/CrawlerBackend/download/avatar:/root/CrawlerBackend/download/avatar
+    command: gunicorn -c gunicorn/gunicorn_conf.py  api:app
