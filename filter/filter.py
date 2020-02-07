@@ -3,93 +3,24 @@
 # Created by panos on 2020/2/6
 # IDE: PyCharm
 
-# from collections import defaultdict
-# import re
-
-# __all__ = ['NaiveFilter', 'BSFilter', 'DFAFilter']
 __all__ = ['DFAFilter']
 __author__ = 'observer'
 __date__ = '2012.01.05'
 
 
-# class NaiveFilter:
-#
-#     """
-#     Filter Messages from keywords
-#     very simple filter implementation
-#     >>> f = NaiveFilter()
-#     >>> f.add("sexy")
-#     >>> f.filter("hello sexy baby")
-#     hello **** baby
-#     """
-#
-#     def __init__(self):
-#         self.keywords = set([])
-#
-#     def parse(self, path):
-#         for keyword in open(path):
-#             self.keywords.add(keyword.strip().decode('utf-8').lower())
-#
-#     def filter(self, message, repl="*"):
-#         message = str(message).lower()
-#         for kw in self.keywords:
-#             message = message.replace(kw, repl)
-#         return message
+class Singleton:
+    def __init__(self, cls):
+        self._cls = cls
+        self._instance = {}
+
+    def __call__(self):
+        if self._cls not in self._instance:
+            self._instance[self._cls] = self._cls()
+        return self._instance[self._cls]
 
 
-# class BSFilter:
-#
-#     """Filter Messages from keywords
-#     Use Back Sorted Mapping to reduce replacement times
-#     >>> f = BSFilter()
-#     >>> f.add("sexy")
-#     >>> f.filter("hello sexy baby")
-#     hello **** baby
-#     """
-#
-#     def __init__(self):
-#         self.keywords = []
-#         self.kwsets = set([])
-#         self.bsdict = defaultdict(set)
-#         self.pat_en = re.compile(r'^[0-9a-zA-Z]+$')  # english phrase or not
-#
-#     def add(self, keyword):
-#         if not isinstance(keyword, str):
-#             keyword = keyword.decode('utf-8')
-#         keyword = keyword.lower()
-#         if keyword not in self.kwsets:
-#             self.keywords.append(keyword)
-#             self.kwsets.add(keyword)
-#             index = len(self.keywords) - 1
-#             for word in keyword.split():
-#                 if self.pat_en.search(word):
-#                     self.bsdict[word].add(index)
-#                 else:
-#                     for char in word:
-#                         self.bsdict[char].add(index)
-#
-#     def parse(self, path):
-#         with open(path, "r") as f:
-#             for keyword in f:
-#                 self.add(keyword.strip())
-#
-#     def filter(self, message, repl="*"):
-#         if not isinstance(message, str):
-#             message = message.decode('utf-8')
-#         message = message.lower()
-#         for word in message.split():
-#             if self.pat_en.search(word):
-#                 for index in self.bsdict[word]:
-#                     message = message.replace(self.keywords[index], repl)
-#             else:
-#                 for char in word:
-#                     for index in self.bsdict[char]:
-#                         message = message.replace(self.keywords[index], repl)
-#         return message
-
-
+@Singleton
 class DFAFilter:
-
     """
     Filter Messages from keywords
     Use DFA to keep algorithm perform constantly
@@ -173,6 +104,6 @@ if __name__ == "__main__":
     # print (gfw.filter("法轮功 我操操操", "*"))
     # print (gfw.filter("针孔摄像机 我操操操", "*"))
     # print (gfw.filter("售假人民币 我操操操", "*"))
-    print (gfw.filter("我操作电脑", "*"))
+    print(gfw.filter("我操作电脑", "*"))
 
     # test_first_character()
