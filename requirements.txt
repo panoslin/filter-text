@@ -1,2 +1,3 @@
 gunicorn==20.0.4
 sanic==19.12.2
+sanic-cors==0.9.9.post4
