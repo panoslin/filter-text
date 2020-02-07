@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   web:
-    image: python:3.8
+    image: panoslin/filter-text:latest
     deploy:  # This only takes effect when deploying to a swarm with docker stack deploy, and is ignored by docker-compose up and docker-compose run.
       replicas: 4  # Run 4 instances of that image as a service called web
       resources:
