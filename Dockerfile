@@ -7,8 +7,7 @@ ADD requirements.txt /filter-text/
 WORKDIR /filter-text
 ADD pip.conf /root/.pip/pip.conf
 
-RUN apt-get update -y \
-    && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 # 修复时区
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ENV PATH=/usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
