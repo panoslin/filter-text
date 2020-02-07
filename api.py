@@ -12,7 +12,6 @@ sys.path.append(curPath)
 from sanic import response as Response
 from sanic import Sanic
 from sanic_cors import CORS
-import sanic.exceptions
 from filter import DFAFilter
 
 
