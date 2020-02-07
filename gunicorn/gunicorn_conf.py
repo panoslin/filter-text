@@ -21,7 +21,7 @@ threads = min(os.cpu_count(), 5)
 # daemon = True
 reload = False
 
-# worker_class = 'sanic.worker.GunicornWorker'
+worker_class = 'sanic.worker.GunicornWorker'
 ## The maximum number of requests a worker will process before restarting.
 ## Any value greater than zero will limit the number of requests a work will process before automatically restarting.
 ## This is a simple method to help limit the damage of memory leaks.
