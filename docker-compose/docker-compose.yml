@@ -13,6 +13,6 @@ services:
     ports:
       - 9974:9974
     volumes:
-      - ../:/filter-nsfw-python3
+      - ../:/filter-text
 #      - /root/CrawlerBackend/download/avatar:/root/CrawlerBackend/download/avatar
     command: gunicorn -c gunicorn/gunicorn_conf.py api:app
