@@ -3,6 +3,4 @@
 # Created by panos on 2020/2/6
 # IDE: PyCharm
 
-
-if __name__ == '__main__':
-    pass
+from filter.filter import DFAFilter
