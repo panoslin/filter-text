@@ -74,6 +74,8 @@ class BSFilter:
         return message
 
     def match(self, message):
+        if message is None:
+            return {}
         if not isinstance(message, str):
             message = message.decode('utf-8')
         message = message.lower()
@@ -163,6 +165,8 @@ class DFAFilter:
         return ''.join(ret)
 
     def match(self, message):
+        if message is None:
+            return {}
         if not isinstance(message, str):
             message = message.decode('utf-8')
         message = message.lower()
@@ -199,7 +203,8 @@ if __name__ == "__main__":
     gfw = DFAFilter()
     from glob import glob
     import os
-    for keywords_file in glob(os.path.join(os.getcwd(), "filter/keywords/*")):
+    print(os.path.join(os.getcwd(), "keywords/*"))
+    for keywords_file in glob(os.path.join(os.getcwd(), "keywords/*")):
         gfw.parse(keywords_file)
 
     # print(gfw.filter("法轮功 我操操操", "*"))
@@ -213,6 +218,8 @@ if __name__ == "__main__":
     print(gfw.match("售假人民币 我操操操"))
     print(gfw.match("我操作电脑"))
     print(gfw.match("class over"))
+    print(gfw.match("如果有吃肉欲望"))
+    print(gfw.match("8cm肉欲拉面终于来福田了，招牌辣么大"))
 
     # import time
     # start_ = time.time()
