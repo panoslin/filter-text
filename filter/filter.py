@@ -197,19 +197,30 @@ if __name__ == "__main__":
     # gfw = NaiveFilter()
     # gfw = BSFilter()
     gfw = DFAFilter()
-    gfw.parse("keywords")
-    # print (gfw.filter("法轮功 我操操操", "*"))
-    # print (gfw.filter("针孔摄像机 我操操操", "*"))
-    # print (gfw.filter("售假人民币 我操操操", "*"))
+    from glob import glob
+    import os
+    for keywords_file in glob(os.path.join(os.getcwd(), "filter/keywords/*")):
+        gfw.parse(keywords_file)
+
+    # print(gfw.filter("法轮功 我操操操", "*"))
+    # print(gfw.filter("针孔摄像机 我操操操", "*"))
+    # print(gfw.filter("售假人民币 我操操操", "*"))
     # print(gfw.filter("我操作电脑", "*"))
     # print(gfw.filter("class over", "*"))
-    import time
-    start_ = time.time()
-    for i in range (1, 1000):
-        print(gfw.match("法轮功 我操操操"))
-        print(gfw.match("针孔摄像机 我操操操"))
-        print(gfw.match("售假人民币 我操操操"))
-        print(gfw.match("我操作电脑"))
-        print(gfw.match("class over"))
-    print(time.time() - start_)
+
+    print(gfw.match("法轮功 我操操操"))
+    print(gfw.match("针孔摄像机 我操操操"))
+    print(gfw.match("售假人民币 我操操操"))
+    print(gfw.match("我操作电脑"))
+    print(gfw.match("class over"))
+
+    # import time
+    # start_ = time.time()
+    # for i in range (1, 1000):
+    #     print(gfw.match("法轮功 我操操操"))
+    #     print(gfw.match("针孔摄像机 我操操操"))
+    #     print(gfw.match("售假人民币 我操操操"))
+    #     print(gfw.match("我操作电脑"))
+    #     print(gfw.match("class over"))
+    # print(time.time() - start_)
     # test_first_character()
