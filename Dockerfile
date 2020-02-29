@@ -1,7 +1,8 @@
 FROM python:3.8
 ENV PYTHONUNBUFFERED 1
 ##  添加国内镜像源
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+#RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+#RUN apt-get update -y
 
 ADD requirements.txt /filter-text/
 WORKDIR /filter-text
