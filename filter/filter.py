@@ -22,6 +22,7 @@ class Singleton:
         return self._instance[self._cls]
 
 
+@Singleton
 class BSFilter:
     """Filter Messages from keywords
     Use Back Sorted Mapping to reduce replacement times
@@ -55,9 +56,15 @@ class BSFilter:
                         self.bsdict[char].add(index)
 
     def parse(self, path):
-        with open(path, "r") as f:
-            for keyword in f:
-                self.add(keyword.strip())
+        try:
+            with open(path) as f:
+                for keyword in f:
+                    self.add(keyword.strip())
+        except IsADirectoryError:
+            for file in glob(os.path.join(path.rstrip("/"), "*")):
+                with open(file) as f:
+                    for keyword in f:
+                        self.add(keyword.strip())
 
     def filter(self, message, repl="*"):
         if not isinstance(message, str):
@@ -133,9 +140,15 @@ class DFAFilter:
             level[self.delimit] = 0
 
     def parse(self, path):
-        with open(path) as f:
-            for keyword in f:
-                self.add(keyword.strip())
+        try:
+            with open(path) as f:
+                for keyword in f:
+                    self.add(keyword.strip())
+        except IsADirectoryError:
+            for file in glob(os.path.join(path.rstrip("/"), "*")):
+                with open(file) as f:
+                    for keyword in f:
+                        self.add(keyword.strip())
 
     def filter(self, message, repl="*"):
         if not isinstance(message, str):
@@ -204,8 +217,8 @@ if __name__ == "__main__":
     from glob import glob
     import os
     print(os.path.join(os.getcwd(), "keywords/*"))
-    for keywords_file in glob(os.path.join(os.getcwd(), "keywords/*")):
-        gfw.parse(keywords_file)
+    # for keywords_file in glob(os.path.join(os.getcwd(), "keywords/*")):
+    gfw.parse(os.path.join(os.getcwd(), "keywords"))
 
     # print(gfw.filter("法轮功 我操操操", "*"))
     # print(gfw.filter("针孔摄像机 我操操操", "*"))
