@@ -4,3 +4,4 @@
 # IDE: PyCharm
 
 from filter.filter import DFAFilter
+from filter.filter import BSFilter

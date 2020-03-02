@@ -3,4 +3,7 @@
 # Created by panos on 2020/2/6
 # IDE: PyCharm
 
-from filter.filter import DFAFilter
+from filter.filter import (
+    DFAFilter,
+    BSFilter,
+)

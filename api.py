@@ -12,8 +12,10 @@ sys.path.append(curPath)
 from sanic import response as Response
 from sanic import Sanic
 from sanic_cors import CORS
-from filter import DFAFilter
-
+from filter import (
+    DFAFilter,
+    BSFilter,
+)
 
 app = Sanic()
 app.config.KEEP_ALIVE = True
@@ -21,14 +23,16 @@ app.config.KEEP_ALIVE_TIMEOUT = 500
 app.config.RESPONSE_TIMEOUT = 500
 CORS(app, automatic_options=True)
 
+
 @app.route("/")
 async def test(request):
-    return Response.json({ "hello": "world" })
+    return Response.json({"hello": "world"})
 
 def get_post_args(request, key, default=None):
-    data = request.json.get(key, default)
-    if not data:
-        data =request.form.get(key, default)
+    try:
+        data = request.json.get(key, default)
+    except AttributeError:
+        data = request.form.get(key, default)
     return data
 
 
@@ -37,9 +41,11 @@ async def filter_text(request):
     if request.method == "GET":
         text = request.args.get("text")
         repl = request.args.get("repl", "*")
+        algorithm = request.args.get("algorithm", "bs")
     else:
         text = get_post_args(request, "text")
         repl = get_post_args(request, "repl", "*")
+        algorithm = get_post_args(request, "algorithm", "bs")
     if not text:
         return Response.json(
             {"code": 400,
@@ -47,10 +53,41 @@ async def filter_text(request):
              "data": None}
         )
     else:
-        gfw = DFAFilter()
+        gfw = DFAFilter() if algorithm == "dfa" else BSFilter()
         gfw.parse("filter/keywords")
 
         result = gfw.filter(message=text, repl=repl)
+
+        return Response.json(
+            {
+                "code": 200,
+                "message": "success",
+                "data": {
+                    "result": result
+                }
+            }
+        )
+
+
+@app.route(uri='/match-text', methods=['GET', 'POST'], name='match')
+async def match_text(request):
+    if request.method == "GET":
+        text = request.args.get("text")
+        algorithm = get_post_args(request, "algorithm", "bs")
+    else:
+        text = get_post_args(request, "text")
+        algorithm = get_post_args(request, "algorithm", "bs")
+    if not text:
+        return Response.json(
+            {"code": 400,
+             "message": "You should specify necessary params `text`",
+             "data": None}
+        )
+    else:
+        gfw = DFAFilter() if algorithm == "dfa" else BSFilter()
+        gfw.parse("filter/keywords")
+
+        result = gfw.match(message=text)
 
         return Response.json(
             {

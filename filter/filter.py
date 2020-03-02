@@ -3,7 +3,10 @@
 # Created by panos on 2020/2/6
 # IDE: PyCharm
 
-__all__ = ['DFAFilter']
+__all__ = [
+    'DFAFilter',
+    'BSFilter'
+]
 __author__ = 'observer'
 __date__ = '2012.01.05'
 
@@ -215,8 +218,7 @@ if __name__ == "__main__":
     # gfw = NaiveFilter()
     # gfw = BSFilter()
     gfw = DFAFilter()
-    from glob import glob
-    import os
+
     print(os.path.join(os.getcwd(), "keywords/*"))
     # for keywords_file in glob(os.path.join(os.getcwd(), "keywords/*")):
     gfw.parse(os.path.join(os.getcwd(), "keywords"))
