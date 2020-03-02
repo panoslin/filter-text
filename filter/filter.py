@@ -10,7 +10,7 @@ __date__ = '2012.01.05'
 from collections import defaultdict
 import re
 from glob import glob
-
+import os
 
 class Singleton:
     def __init__(self, cls):
