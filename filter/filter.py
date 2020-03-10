@@ -14,20 +14,30 @@ from collections import defaultdict
 import re
 from glob import glob
 import os
+from weakref import WeakValueDictionary
 
-class Singleton:
-    def __init__(self, cls):
-        self._cls = cls
-        self._instance = {}
+# class Singleton:
+#     def __init__(self, cls):
+#         self._cls = cls
+#         self._instance = {}
+#
+#     def __call__(self):
+#         if self._cls not in self._instance:
+#             self._instance[self._cls] = self._cls()
+#         return self._instance[self._cls]
 
-    def __call__(self):
-        if self._cls not in self._instance:
-            self._instance[self._cls] = self._cls()
-        return self._instance[self._cls]
+class Singleton(type):
+    _instances = WeakValueDictionary()
 
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            # This variable declaration is required to force a
+            # strong reference on the instance.
+            instance = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
 
-@Singleton
-class BSFilter:
+class BSFilter(metaclass=Singleton):
     """Filter Messages from keywords
     Use Back Sorted Mapping to reduce replacement times
     >>> f = BSFilter()
@@ -105,8 +115,7 @@ class BSFilter:
         return keywords
 
 
-@Singleton
-class DFAFilter:
+class DFAFilter(metaclass=Singleton):
     """
     Filter Messages from keywords
     Use DFA to keep algorithm perform constantly
