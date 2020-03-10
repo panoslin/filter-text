@@ -73,10 +73,12 @@ async def filter_text(request):
 async def match_text(request):
     if request.method == "GET":
         text = request.args.get("text")
-        algorithm = get_post_args(request, "algorithm", "bs")
+        algorithm = request.args.get("algorithm")
+        keywords = request.args.get("keywords")
     else:
         text = get_post_args(request, "text")
         algorithm = get_post_args(request, "algorithm", "bs")
+        keywords = get_post_args(request, "keywords")
     if not text:
         return Response.json(
             {"code": 400,
@@ -85,9 +87,14 @@ async def match_text(request):
         )
     else:
         gfw = DFAFilter() if algorithm == "dfa" else BSFilter()
-        gfw.parse("filter/keywords")
+        if keywords:
+            for ele in keywords:
+                gfw.add(ele)
+        else:
 
-        result = gfw.match(message=text)
+            gfw.parse("filter/keywords")
+
+        result = list(gfw.match(message=text))
 
         return Response.json(
             {
